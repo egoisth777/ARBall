@@ -1,0 +1,91 @@
+# =============== #
+# Unity generated #
+# =============== #
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Ll]ibrary/
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+[Ee]xported[Oo]bj/
+.vscode/
+.idea/
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.pidb.meta
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ================ #
+# Unity3D Generated #
+# ================ #
+*_i.c
+*_p.c
+*_o.c
+*_i.h
+*_p.h
+*.unityproj
+*.unitypackage
+
+# ============ #
+# Compiled Lua #
+# ============ #
+*.unityproj
+*.tmproj
+*.tml
+*.tmproj.meta
+*.tml.meta
+
+# =================== #
+# Unity3D generated folder #
+# =================== #
+/[Ll]ogs/
+/[Mm]emoryCaptures/
+
+# ============ #
+# macOS / OS X #
+# ============ #
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# ==================== #
+# Thumbnails directory #
+# ==================== #
+._*
+
+# =============== #
+# Files and folders #
+# =============== #
+*.sln
+*.userprefs
+*.usertask
+*.pidb.meta
+*.booproj.user
+*~
+*.tmp
+*.bak
+*.swp
+*.[Cc]ache
+*.bak
+*.log
+*.vs-ar/
+
+/.vs
+/.vscode
+.vsconfig
+/Logs
