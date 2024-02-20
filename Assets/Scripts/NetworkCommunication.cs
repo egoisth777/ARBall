@@ -55,8 +55,7 @@ namespace MyFirstARGame
             Vector2 randomPosition2D = Random.insideUnitCircle * spawnRadius;
             Vector3 randomPosition3D = new Vector3(randomPosition2D.x, 0.0f, randomPosition2D.y);
             randomPosition3D += worldOrigin;
-            photonView.RPC("InstantiateMouse", RpcTarget.All, randomPosition3D);
-            
+            PhotonNetwork.Instantiate("Mouse", randomPosition3D, Quaternion.identity);
         }
         
         /// <summary>
@@ -75,7 +74,7 @@ namespace MyFirstARGame
             Vector3 randomPosition3D = new Vector3(randomPosition2D.x, 0.0f, randomPosition2D.y);
             randomPosition3D += worldOrigin;
             randomPosition3D.y = 10.0f;
-            photonView.RPC("InstantiateBulletSupply", RpcTarget.All, randomPosition3D);
+            PhotonNetwork.Instantiate("BulletSupply", randomPosition3D, Quaternion.identity);
         }
         
         /// <summary>
@@ -145,5 +144,4 @@ namespace MyFirstARGame
             photonView.RPC("Network_SetPlayerScore", player, playerName, currentScore);
         }
     }
-
 }
