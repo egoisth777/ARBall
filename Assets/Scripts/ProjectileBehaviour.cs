@@ -25,17 +25,14 @@ namespace MyFirstARGame
             }
         }
         
-        
-        
         private void OnCollisionEnter(Collision collision)
         {
-            var photonView = this.transform.GetComponent<PhotonView>();
-            var playerID = Mathf.Max((int)photonView.InstantiationData[0], 0);
+            
             if (collision.gameObject.CompareTag("mice"))
-            {
-                collision.gameObject.GetComponent<NetworkedInteractable>().Die();
+            {   
                 NetworkCommunication networkCommunication = FindObjectOfType<NetworkCommunication>();
                 networkCommunication.IncrementScore();
+                networkCommunication.Network_DestroyMouse(collision.gameObject);
                 Die();
             }
         }

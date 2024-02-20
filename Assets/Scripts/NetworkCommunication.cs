@@ -80,35 +80,17 @@ namespace MyFirstARGame
         /// <summary>
         /// 
         /// </summary>
-        private void Network_DestroyMouse(GameObject mouseObject)
+        public void Network_DestroyMouse(GameObject mouseObject) 
         {
-            photonView.RPC("DestroyMouse", RpcTarget.All, mouseObject);
+            PhotonNetwork.Destroy(mouseObject);
         }
 
-
-        [PunRPC]
-        public void InstantiateBulletSupply(Vector3 position){
-            Instantiate(bulletPrefab, position, Quaternion.identity);
-        }
-        
-        
-        
-        [PunRPC] // must be marked for methods that is intended to be called by PhotonView
-        public void InstantiateMouse(Vector3 position){
-            Instantiate(mousePrefab, position, Quaternion.identity);
-        }
-
-        /// <summary>
-        /// Destroys the specified mouse game object.
-        /// </summary>
-        /// <param name="mousePrefab">The mouse game object to destroy.</param>
-        [PunRPC]
-        public void DestroyMouse(GameObject mousePrefab)
+        public void Network_DestroyBullet(GameObject supplyObject)
         {
-            Destroy(mousePrefab);
+            PhotonNetwork.Destroy(supplyObject);
         }
         
-        
+
         
         // Start is called before the first frame update
         void Start()
