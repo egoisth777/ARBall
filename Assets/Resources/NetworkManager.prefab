@@ -47,6 +47,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreboard: {fileID: 4871763298997701247}
+  mousePrefab: {fileID: 8867914467753500226, guid: 1eda799e12d07e54dba8047156a90c45,
+    type: 3}
+  bulletPrefab: {fileID: 5487324373703837909, guid: 7d04357db404f2c42b573598ec60891b,
+    type: 3}
+  spawnRadius: 5
+  spawnInterval: 5
 --- !u!114 &4871763298997701247
 MonoBehaviour:
   m_ObjectHideFlags: 0

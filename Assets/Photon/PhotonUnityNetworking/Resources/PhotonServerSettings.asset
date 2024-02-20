@@ -43,6 +43,10 @@ MonoBehaviour:
   - SendOffset
   - UpdateScale
   - Network_SetPlayerScore
+  - InstantiateMouse
+  - DestroyMouse
+  - InstantiateBulletSuppply
+  - InstantiateBulletSupply
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

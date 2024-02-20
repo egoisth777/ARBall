@@ -12,7 +12,7 @@ namespace MyFirstARGame
         /// <summary>
         /// Gets the singleton instance of this class (<see cref="NetworkLauncher"/>).
         /// </summary>
-        public static NetworkLauncher Singleton = null;
+        public static NetworkLauncher Singleton = null; // represent the singleton of this object
 
         /// <summary>
         /// Event handler for when a room has been joined.
@@ -50,16 +50,19 @@ namespace MyFirstARGame
             }
             else
             {
-                GameObject.Destroy(this.gameObject);
+                GameObject.Destroy(this.gameObject); // Ensure that only one instance of the class is created
             }
 
-            GameObject.DontDestroyOnLoad(this.gameObject);
+            GameObject.DontDestroyOnLoad(this.gameObject); // prevent the object being destroyed when loading new scene
         }
 
+        /// <summary>
+        /// on launching the networks, when the game starts, it will call this method
+        /// </summary>
         private void Start()
         {
             // Try to connect to the master server.
-            PhotonNetwork.ConnectUsingSettings();
+            PhotonNetwork.ConnectUsingSettings(); // Connect to the Hos 
         }
 
         private void OnGUI()
@@ -71,7 +74,7 @@ namespace MyFirstARGame
             };
 
             if (this.isJoinedToRoom)
-            {
+            {   
                 GUI.Label(new Rect(0, Screen.height / 2 + 300, 100, 100), "Joined to room!!!", style);
             }
             else
@@ -80,6 +83,10 @@ namespace MyFirstARGame
             }
         }
 
+        /// <summary>
+        /// On connected to user 
+        ///  
+        /// </summary>
         public override void OnConnectedToMaster()
         {
             // If we enter here it means we are connected to the master server.
@@ -100,7 +107,6 @@ namespace MyFirstARGame
             {
                 this.NetworkCommunication = PhotonNetwork.Instantiate("NetworkManager", Vector3.zero, Quaternion.identity).GetComponent<NetworkCommunication>();
             }
-
             this.JoinedRoom?.Invoke(this);
         }
 
