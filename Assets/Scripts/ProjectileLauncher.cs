@@ -42,8 +42,6 @@
             rigidbody.velocity = ray.direction * initialSpeed;
 
             // Update score
-            var networkCommunication = FindObjectOfType<NetworkCommunication>();
-            networkCommunication.IncrementScore();
         }
     }
 }
