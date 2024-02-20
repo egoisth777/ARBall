@@ -88,16 +88,14 @@ namespace MyFirstARGame
 
 
         [PunRPC]
-        public void InstantiateBulletSupply(Vector3 position)
-        {
+        public void InstantiateBulletSupply(Vector3 position){
             Instantiate(bulletPrefab, position, Quaternion.identity);
         }
         
         
         
         [PunRPC] // must be marked for methods that is intended to be called by PhotonView
-        public void InstantiateMouse(Vector3 position)
-        {
+        public void InstantiateMouse(Vector3 position){
             Instantiate(mousePrefab, position, Quaternion.identity);
         }
 
