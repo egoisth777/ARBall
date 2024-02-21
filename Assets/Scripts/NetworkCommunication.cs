@@ -160,11 +160,11 @@ namespace MyFirstARGame
             Debug.Log(log);
         }
         
-        public void IncrementScore()
+        public void IncrementScore(int score)
         {
             var playerName = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
             var currentScore = this.scoreboard.GetScore(playerName);
-            photonView.RPC("Network_SetPlayerScore", RpcTarget.All, playerName, currentScore + 1);
+            photonView.RPC("Network_SetPlayerScore", RpcTarget.All, playerName, currentScore + score);
         }
 
         [PunRPC] // Method that are managed by the Photon framework
