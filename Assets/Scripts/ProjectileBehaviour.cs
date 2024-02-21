@@ -62,7 +62,8 @@ namespace MyFirstARGame
 
         private void Die()
         {
-            PhotonNetwork.Destroy(gameObject);
+            NetworkCommunication networkCommunication = FindObjectOfType<NetworkCommunication>();
+            networkCommunication.DestroyObject(this.gameObject);
         }
     }
 }

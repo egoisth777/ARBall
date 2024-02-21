@@ -49,6 +49,7 @@ MonoBehaviour:
   - InstantiateBulletSupply
   - Network_DestroyObject
   - Network_Log
+  - Network_SetPlayerBulletSupply
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

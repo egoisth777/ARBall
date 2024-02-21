@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 8760970535237894531}
   - component: {fileID: 6816183199704474514}
   m_Layer: 0
-  m_Name: ManipulatorCubeNetwork
+  m_Name: Manipulator
   m_TagString: mice
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

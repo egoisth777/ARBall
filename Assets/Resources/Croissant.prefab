@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6805994155474581686}
   - component: {fileID: 1522112227745662492}
   - component: {fileID: 8125576358287620547}
+  - component: {fileID: -7532003909267628971}
   m_Layer: 0
   m_Name: Croissant
   m_TagString: croissant
@@ -166,3 +167,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileMaterials: []
+--- !u!64 &-7532003909267628971
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4029465575852789504}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: de7b8a9948f1666449e3f75a1abb6f69, type: 3}

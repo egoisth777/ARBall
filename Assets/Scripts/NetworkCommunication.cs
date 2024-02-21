@@ -8,7 +8,7 @@ namespace MyFirstARGame
     using Photon.Realtime;
     using UnityEngine;
 
-    
+
     /// <summary>
     /// You can use this class to make RPC calls between the clients. It is already spawned on each client with networking capabilities.
     /// This is used to manage all object spawning event in the game across the players
@@ -16,26 +16,23 @@ namespace MyFirstARGame
     /// </summary>
     public class NetworkCommunication : MonoBehaviourPun
     {
-        [SerializeField]
-        private Scoreboard scoreboard; // Network Manager Could view the Scoreboard
+        [SerializeField] private Scoreboard scoreboard; // Network Manager Could view the Scoreboard
 
-        [SerializeField] 
-        private GameObject mousePrefab;
-        [SerializeField]
-        private GameObject bulletPrefab;
-        
+        [SerializeField] private GameObject mousePrefab;
+        [SerializeField] private GameObject bulletPrefab;
+
         public float spawnRadius = 5.0f; // 5 meters of spawning range
         public float spawnInterval = 5.0f; // 5 seconds for spawning 
-        
+
         // Gameobject list keeps tracking of resources and targets generated in the game
-        private List<GameObject> mouseList;  // List of Mouse to be shot in the game
-        private List<GameObject> supplyList;  // List of items that could recharge your bullet Supply
+        private List<GameObject> mouseList; // List of Mouse to be shot in the game
+        private List<GameObject> supplyList; // List of items that could recharge your bullet Supply
         private List<GameObject> troublerList; //  List of items that could disable the players
         private List<GameObject> gainerList; // List of items that has gaining effects
-        
-        
-        
-        
+
+
+
+
         private IEnumerator spawnPrefabRoutine()
         {
             while (true)
@@ -46,7 +43,7 @@ namespace MyFirstARGame
                 Network_SpawnBulletSupplyAroundOrigin(); // Will spawn Bullet Supply From the Sky in Every 5 seconds
             }
         }
-        
+
         /// <summary>
         /// This function will spawn mouse Around the origin
         /// which is the location of the Image object in the scene
@@ -56,14 +53,14 @@ namespace MyFirstARGame
             // get the world origin
             GameObject Image = GameObject.Find("ImageTarget");
             Vector3 worldOrigin = Image.transform.position;
-            
+
             // generate prefab around the world origin in certain radius
             Vector2 randomPosition2D = Random.insideUnitCircle * spawnRadius;
             Vector3 randomPosition3D = new Vector3(randomPosition2D.x, 0.0f, randomPosition2D.y);
             randomPosition3D += worldOrigin;
             mouseList.Add(PhotonNetwork.Instantiate("Mouse", randomPosition3D, Quaternion.identity));
         }
-        
+
         /// <summary>
         /// Bullet supply random generator
         /// Generate Bullet Supply randomly on the map
@@ -74,16 +71,16 @@ namespace MyFirstARGame
             // get the world origin
             GameObject Image = GameObject.Find("ImageTarget");
             Vector3 worldOrigin = Image.transform.position;
-            
+
             // generate prefab around the world origin in certain radius
             Vector2 randomPosition2D = Random.insideUnitCircle * spawnRadius;
             Vector3 randomPosition3D = new Vector3(randomPosition2D.x, 0.0f, randomPosition2D.y);
             randomPosition3D += worldOrigin;
-            randomPosition3D.y = 10.0f; 
+            randomPosition3D.y = 10.0f;
             supplyList.Add(PhotonNetwork.Instantiate("BulletSupply", randomPosition3D, Quaternion.identity));
         }
-        
-        
+
+
         /// <summary>
         /// <param name="PunRPC">This function is marked as RPC method</param>
         /// Calling this method to delete an Network Object by its viewID across the network
@@ -96,7 +93,7 @@ namespace MyFirstARGame
             PhotonNetwork.Destroy(targetView.gameObject);
         }
 
-        
+
         /// <summary>
         /// Wrapper method to call, when trying to destroy any object by passing its object name
         /// </summary>
@@ -106,7 +103,7 @@ namespace MyFirstARGame
             // Retrieve the View ID of the object
             int viewID = gameObject.GetComponent<PhotonView>().ViewID;
             // Destroy the game object according to the ID
-            photonView.RPC("Network_DestroyObject", RpcTarget.MasterClient, viewID);  
+            photonView.RPC("Network_DestroyObject", RpcTarget.MasterClient, viewID);
         }
 
         /// <summary>
@@ -115,12 +112,12 @@ namespace MyFirstARGame
         /// <param name="viewID"></param>
         public void DestroyObject(int viewID)
         {
-            photonView.RPC("Network_DestroyObject", RpcTarget.MasterClient, viewID);  
+            photonView.RPC("Network_DestroyObject", RpcTarget.MasterClient, viewID);
         }
 
-        
-        
-        
+
+
+
         /// <summary>
         /// Start is called before the first frame update
         /// Instantiate: mouseList
@@ -137,7 +134,7 @@ namespace MyFirstARGame
         // Update is called once per frame
         void Update()
         {
-            
+
         }
 
         /// <summary>
@@ -148,7 +145,7 @@ namespace MyFirstARGame
         {
             photonView.RPC("Network_Log", RpcTarget.MasterClient, log);
         }
-        
+
         /// <summary>
         /// <typeparamref name="PunRPC"/> Marked as PunRPC>
         /// 
@@ -159,8 +156,23 @@ namespace MyFirstARGame
         {
             Debug.Log(log);
         }
-        
-        public void IncrementScore(int score)
+
+        public void IncrementBulletSupply()
+        {
+            var playerName = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
+            var currentBullet = this.scoreboard.GetBulletNo(playerName);
+            photonView.RPC("Network_SetPlayerBulletSupply", RpcTarget.All, playerName,currentBullet + 3);
+        }
+
+
+        [PunRPC]
+        public void Network_SetPlayerBulletSupply(string playerName, int newSupply)
+        {
+            Debug.Log($"Player{playerName} score!");
+            scoreboard.SetBulletNo(playerName, newSupply);
+        }
+
+    public void IncrementScore(int score)
         {
             var playerName = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
             var currentScore = this.scoreboard.GetScore(playerName);
