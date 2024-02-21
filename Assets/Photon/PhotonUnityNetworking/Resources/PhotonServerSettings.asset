@@ -47,6 +47,8 @@ MonoBehaviour:
   - DestroyMouse
   - InstantiateBulletSuppply
   - InstantiateBulletSupply
+  - Network_DestroyObject
+  - Network_Log
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
