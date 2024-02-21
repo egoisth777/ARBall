@@ -27,7 +27,7 @@ namespace MyFirstARGame
         // Gameobject list keeps tracking of resources and targets generated in the game
         private List<GameObject> mouseList; // List of Mouse to be shot in the game
         private List<GameObject> supplyList; // List of items that could recharge your bullet Supply
-        private List<GameObject> troublerList; //  List of items that could disable the players
+        private List<GameObject> manipulatorList; //  List of items that could disable the players
         private List<GameObject> gainerList; // List of items that has gaining effects
 
 
@@ -90,21 +90,12 @@ namespace MyFirstARGame
         public void Network_DestroyObject(int viewID)
         {
             PhotonView targetView = PhotonView.Find(viewID);
-            PhotonNetwork.Destroy(targetView.gameObject);
+            if (targetView.IsMine)
+            {
+                PhotonNetwork.Destroy(targetView.gameObject);
+            }
         }
 
-
-        /// <summary>
-        /// Wrapper method to call, when trying to destroy any object by passing its object name
-        /// </summary>
-        /// <param name="viewID"></param>
-        public void DestroyObject(GameObject gameObject)
-        {
-            // Retrieve the View ID of the object
-            int viewID = gameObject.GetComponent<PhotonView>().ViewID;
-            // Destroy the game object according to the ID
-            photonView.RPC("Network_DestroyObject", RpcTarget.MasterClient, viewID);
-        }
 
         /// <summary>
         /// Destroy an object directly on the Map
@@ -112,7 +103,16 @@ namespace MyFirstARGame
         /// <param name="viewID"></param>
         public void DestroyObject(int viewID)
         {
-            photonView.RPC("Network_DestroyObject", RpcTarget.MasterClient, viewID);
+            PhotonView targetView = PhotonView.Find(viewID);
+            if (targetView != null)
+            {
+                // Check if the current client owns the object or if it's the master client
+                photonView.RPC("Network_DestroyObject", RpcTarget.All, viewID);
+            }
+            else
+            {
+                Debug.LogError("PhotonView not existed!");
+            }
         }
 
 
@@ -136,7 +136,7 @@ namespace MyFirstARGame
         {
 
         }
-
+        
         /// <summary>
         /// Helper that could Print the log
         /// </summary>
@@ -164,15 +164,14 @@ namespace MyFirstARGame
             photonView.RPC("Network_SetPlayerBulletSupply", RpcTarget.All, playerName,currentBullet + 3);
         }
 
-
         [PunRPC]
         public void Network_SetPlayerBulletSupply(string playerName, int newSupply)
         {
-            Debug.Log($"Player{playerName} score!");
+            Debug.Log($"Player{playerName} getSupply!");
             scoreboard.SetBulletNo(playerName, newSupply);
         }
-
-    public void IncrementScore(int score)
+        
+        public void IncrementScore(int score)
         {
             var playerName = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
             var currentScore = this.scoreboard.GetScore(playerName);

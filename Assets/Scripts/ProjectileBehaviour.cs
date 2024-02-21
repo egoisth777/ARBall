@@ -11,6 +11,7 @@ namespace MyFirstARGame
         [SerializeField]
         private Material[] projectileMaterials;
 
+        public NetworkCommunication networkCommunication;
         private float alive;
 
         private void Awake()
@@ -43,27 +44,71 @@ namespace MyFirstARGame
 
         private void OnCollisionEnter(Collision collision)
         {
-            
             if (collision.gameObject.CompareTag("mice"))
-            {   
-                NetworkCommunication networkCommunication = FindObjectOfType<NetworkCommunication>();
-                if (this.gameObject.tag == "cheese")
+            {
+                // Retrieve the PhotonView of the collided object
+                PhotonView collidedObjectPhotonView = collision.gameObject.GetComponent<PhotonView>();
+
+                // Ensure the PhotonView exists
+                if (collidedObjectPhotonView != null)
                 {
-                    networkCommunication.IncrementScore(1);
+                    NetworkLauncher networkLauncher = FindObjectOfType<NetworkLauncher>();
+                    if (networkLauncher != null && networkLauncher.NetworkCommunication != null)
+                    {
+                        // Destroy the collided object network-wide
+                        networkLauncher.NetworkCommunication.LogHelper("I am reached");
+                        networkLauncher.NetworkCommunication.DestroyObject(collidedObjectPhotonView.ViewID);
+                        // Increment score based on the bullet's tag
+                        if (this.gameObject.tag == "cheese")
+                        {
+                            networkLauncher.NetworkCommunication.IncrementScore(1);
+                        }
+                        else if (this.gameObject.tag == "croissant")
+                        {
+                            networkLauncher.NetworkCommunication.IncrementScore(3);
+                        }
+
+                        // Call Die method to destroy the bullet itself network-wide
+                        Die();
+                    }
+                    else
+                    {
+                        Debug.LogError("NetworkLauncher or NetworkCommunication is not found. Destroying locally.");
+                        PhotonNetwork.Destroy(collision.gameObject); // Fallback to local destruction if NetworkCommunication is not accessible
+                        Die(); // Destroy the bullet as well
+                    }
                 }
-                else if (this.gameObject.tag == "croissant")
+                else
                 {
-                    networkCommunication.IncrementScore(3);
+                    Debug.LogError("PhotonView component is missing on the collided object.");
                 }
-                networkCommunication.DestroyObject(collision.gameObject);
-                Die();
             }
         }
-
+        /// <summary>
+        /// This function will get the bullet to be destroyed by the Network Components
+        /// 
+        /// </summary>
         private void Die()
         {
-            NetworkCommunication networkCommunication = FindObjectOfType<NetworkCommunication>();
-            networkCommunication.DestroyObject(this.gameObject);
+            // Check if the PhotonView component is attached to this gameObject
+            PhotonView photonView = GetComponent<PhotonView>();
+            if (photonView != null)
+            {
+                // Ensure this object is owned by the current client or is the master client
+                if (photonView.IsMine || PhotonNetwork.IsMasterClient)
+                {
+                    // Use the NetworkCommunication class to destroy the object across the network
+                    NetworkLauncher networkLauncher = FindObjectOfType<NetworkLauncher>();
+                    if (networkLauncher != null && networkLauncher.NetworkCommunication != null)
+                    {
+                        networkLauncher.NetworkCommunication.DestroyObject(photonView.ViewID);
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("PhotonView component is missing on this object.");
+            }
         }
     }
 }
