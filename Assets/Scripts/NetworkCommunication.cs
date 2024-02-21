@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 
 namespace MyFirstARGame
 {
@@ -13,7 +14,6 @@ namespace MyFirstARGame
     /// </summary>
     public class NetworkCommunication : MonoBehaviourPun
     {
-
         [SerializeField]
         private Scoreboard scoreboard; // Network Manager Could view the Scoreboard
 
@@ -22,14 +22,12 @@ namespace MyFirstARGame
         [SerializeField]
         private GameObject bulletPrefab;
         
-        public float spawnRadius = 10.0f; // 5 meters of spawning range
+        public float spawnRadius = 5.0f; // 5 meters of spawning range
         public float spawnInterval = 5.0f; // 5 seconds for spawning 
-
-
-        // Gameobject list keeps tracking of resources and targets generated in the game
-        private ArrayList mouseList;
-        private ArrayList supplyList;
         
+        // Gameobject list keeps tracking of resources and targets generated in the game
+        public List<GameObject> mouseList;
+        public List<GameObject> supplyList;
         private IEnumerator spawnPrefabRoutine()
         {
             while (true)
@@ -55,7 +53,7 @@ namespace MyFirstARGame
             Vector2 randomPosition2D = Random.insideUnitCircle * spawnRadius;
             Vector3 randomPosition3D = new Vector3(randomPosition2D.x, 0.0f, randomPosition2D.y);
             randomPosition3D += worldOrigin;
-            PhotonNetwork.Instantiate("Mouse", randomPosition3D, Quaternion.identity);
+            mouseList.Add(PhotonNetwork.Instantiate("Mouse", randomPosition3D, Quaternion.identity));
         }
         
         /// <summary>
@@ -73,12 +71,12 @@ namespace MyFirstARGame
             Vector2 randomPosition2D = Random.insideUnitCircle * spawnRadius;
             Vector3 randomPosition3D = new Vector3(randomPosition2D.x, 0.0f, randomPosition2D.y);
             randomPosition3D += worldOrigin;
-            randomPosition3D.y = 10.0f;
-            PhotonNetwork.Instantiate("BulletSupply", randomPosition3D, Quaternion.identity);
+            randomPosition3D.y = 10.0f; 
+            supplyList.Add(PhotonNetwork.Instantiate("BulletSupply", randomPosition3D, Quaternion.identity));
         }
         
         /// <summary>
-        /// 
+        ///   
         /// </summary>
         public void Network_DestroyMouse(GameObject mouseObject) 
         {
@@ -92,9 +90,16 @@ namespace MyFirstARGame
         
 
         
-        // Start is called before the first frame update
+        /// <summary>
+        /// Start is called before the first frame update
+        /// Instantiate: mouseList
+        /// Instantiate: supplyList
+        /// </summary>
         void Start()
         {
+            // Instantiate the lists that manages the creation and destroy of the prefab 
+            mouseList = new List<GameObject>();
+            supplyList = new List<GameObject>();
             StartCoroutine(spawnPrefabRoutine());
         }
 
