@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,6 +7,7 @@ namespace MyFirstARGame
     using Photon.Pun;
     using Photon.Realtime;
     using UnityEngine;
+
     
     /// <summary>
     /// You can use this class to make RPC calls between the clients. It is already spawned on each client with networking capabilities.
@@ -26,8 +28,14 @@ namespace MyFirstARGame
         public float spawnInterval = 5.0f; // 5 seconds for spawning 
         
         // Gameobject list keeps tracking of resources and targets generated in the game
-        public List<GameObject> mouseList;
-        public List<GameObject> supplyList;
+        private List<GameObject> mouseList;  // List of Mouse to be shot in the game
+        private List<GameObject> supplyList;  // List of items that could recharge your bullet Supply
+        private List<GameObject> troublerList; //  List of items that could disable the players
+        private List<GameObject> gainerList; // List of items that has gaining effects
+        
+        
+        
+        
         private IEnumerator spawnPrefabRoutine()
         {
             while (true)
@@ -35,7 +43,7 @@ namespace MyFirstARGame
                 yield return new WaitForSeconds(spawnInterval);
                 // call spawning code here
                 Network_SpawnMouseAroundOrigin(); // Will spawn the mouse every 5 seconds
-                Network_SpawnBulletSupplyAroundOrigin();
+                Network_SpawnBulletSupplyAroundOrigin(); // Will spawn Bullet Supply From the Sky in Every 5 seconds
             }
         }
         
@@ -75,20 +83,43 @@ namespace MyFirstARGame
             supplyList.Add(PhotonNetwork.Instantiate("BulletSupply", randomPosition3D, Quaternion.identity));
         }
         
-        /// <summary>
-        ///   
-        /// </summary>
-        public void Network_DestroyMouse(GameObject mouseObject) 
-        {
-            PhotonNetwork.Destroy(mouseObject);
-        }
-
-        public void Network_DestroyBullet(GameObject supplyObject)
-        {
-            PhotonNetwork.Destroy(supplyObject);
-        }
         
+        /// <summary>
+        /// <param name="PunRPC">This function is marked as RPC method</param>
+        /// Calling this method to delete an Network Object by its viewID across the network
+        /// </summary>
+        /// <param name="viewID"></param>
+        [PunRPC]
+        public void Network_DestroyObject(int viewID)
+        {
+            PhotonView targetView = PhotonView.Find(viewID);
+            PhotonNetwork.Destroy(targetView.gameObject);
+        }
 
+        
+        /// <summary>
+        /// Wrapper method to call, when trying to destroy any object by passing its object name
+        /// </summary>
+        /// <param name="viewID"></param>
+        public void DestroyObject(GameObject gameObject)
+        {
+            // Retrieve the View ID of the object
+            int viewID = gameObject.GetComponent<PhotonView>().ViewID;
+            // Destroy the game object according to the ID
+            photonView.RPC("Network_DestroyObject", RpcTarget.MasterClient, viewID);  
+        }
+
+        /// <summary>
+        /// Destroy an object directly on the Map
+        /// </summary>
+        /// <param name="viewID"></param>
+        public void DestroyObject(int viewID)
+        {
+            photonView.RPC("Network_DestroyObject", RpcTarget.MasterClient, viewID);  
+        }
+
+        
+        
         
         /// <summary>
         /// Start is called before the first frame update
@@ -109,6 +140,26 @@ namespace MyFirstARGame
             
         }
 
+        /// <summary>
+        /// Helper that could Print the log
+        /// </summary>
+        /// <param name="log"></param>
+        public void LogHelper(string log)
+        {
+            photonView.RPC("Network_Log", RpcTarget.MasterClient, log);
+        }
+        
+        /// <summary>
+        /// <typeparamref name="PunRPC"/> Marked as PunRPC>
+        /// 
+        /// </summary>
+        /// <param name="log"></param>
+        [PunRPC]
+        private void Network_Log(string log)
+        {
+            Debug.Log(log);
+        }
+        
         public void IncrementScore()
         {
             var playerName = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";

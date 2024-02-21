@@ -31,12 +31,17 @@ namespace MyFirstARGame
             if (collision.gameObject.CompareTag("mice"))
             {   
                 NetworkCommunication networkCommunication = FindObjectOfType<NetworkCommunication>();
+                networkCommunication.LogHelper("step to increment score");
                 networkCommunication.IncrementScore();
-                networkCommunication.Network_DestroyMouse(collision.gameObject);
+                networkCommunication.LogHelper("step to destroy");
+                networkCommunication.LogHelper(collision.gameObject.name);
+                networkCommunication.DestroyObject(collision.gameObject);
                 Die();
             }
         }
-
+        
+        
+        
         private void Die()
         {
             PhotonNetwork.Destroy(gameObject);
