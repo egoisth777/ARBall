@@ -90,8 +90,10 @@ namespace MyFirstARGame
         public void Network_DestroyObject(int viewID)
         {
             PhotonView targetView = PhotonView.Find(viewID);
+            Debug.Log("RPC Try Destroy: " + targetView.ViewID);
             if (targetView.IsMine)
             {
+                Debug.Log("Destroy: " + targetView.ViewID);
                 PhotonNetwork.Destroy(targetView.gameObject);
             }
         }
@@ -103,9 +105,11 @@ namespace MyFirstARGame
         /// <param name="viewID"></param>
         public void DestroyObject(int viewID)
         {
+            Debug.Log("Try Destroy: " + viewID.ToString());
             PhotonView targetView = PhotonView.Find(viewID);
             if (targetView != null)
             {
+                Debug.Log("RPC Destroy: " + viewID.ToString());
                 // Check if the current client owns the object or if it's the master client
                 photonView.RPC("Network_DestroyObject", RpcTarget.All, viewID);
             }
@@ -128,7 +132,8 @@ namespace MyFirstARGame
             // Instantiate the lists that manages the creation and destroy of the prefab 
             mouseList = new List<GameObject>();
             supplyList = new List<GameObject>();
-            StartCoroutine(spawnPrefabRoutine());
+            //StartCoroutine(spawnPrefabRoutine());
+            Network_SpawnMouseAroundOrigin();
         }
 
         // Update is called once per frame

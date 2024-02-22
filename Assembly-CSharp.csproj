@@ -55,6 +55,7 @@
     <Compile Include="Assets\Scripts\Scoreboard.cs" />
     <Compile Include="Assets\Scripts\Unity\UI\Requirements\RequiresOcclusion.cs" />
     <Compile Include="Assets\Scripts\Unity\UI\MenuFollowCamera.cs" />
+    <Compile Include="Assets\Scripts\MouseBehavior.cs" />
     <Compile Include="Assets\Scripts\NetworkLauncher.cs" />
     <Compile Include="Assets\Scripts\TrackedImageController.cs" />
     <Compile Include="Assets\Photon\PhotonChat\Demos\DemoChat\AppSettingsExtensions.cs" />

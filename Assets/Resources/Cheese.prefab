@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileMaterials: []
+  networkCommunication: {fileID: 0}
 --- !u!64 &5894336273482713124
 MeshCollider:
   m_ObjectHideFlags: 0
